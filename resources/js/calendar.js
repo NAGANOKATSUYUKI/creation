@@ -4,6 +4,9 @@ import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction"; // 追記
 import axios from 'axios';
 
+let click = 0;
+let oneClickTimer;
+
 
 // idがcalendarのDOMを取得
 var calendarEl = document.getElementById("calendar");
@@ -32,7 +35,7 @@ let calendar = new Calendar(calendarEl, {
         if (eventName) {
             axios
                 .post(route('event.store'), {
-                    start_date: info.start.valueOf(),
+                    start_date: info.start.valueOf(), 
                     end_date: info.end.valueOf(),
                     name: eventName,
                 })
@@ -45,7 +48,7 @@ let calendar = new Calendar(calendarEl, {
                         allDay: true, // 終日かどうか
                     });
                 })
-                .catch(() => {
+                .catch(()=> {
                     // バリデーションエラーなど
                     alert("登録に失敗しました");
                 });
@@ -58,9 +61,9 @@ let calendar = new Calendar(calendarEl, {
                 end_date: info.end.valueOf(),
             })
             .then(response => {
-                // 追加したイベントを削除 
+                // 追加したイベントを削除
                 calendar.removeAllEvents();
-                // カレンダーに読み込み 
+                // カレンダーに読み込み
                 successCallback(response.data);
             })
             .catch(() => {
@@ -68,6 +71,51 @@ let calendar = new Calendar(calendarEl, {
                 alert("取得に失敗しました");
             });
     },
+    eventDorp: function(info) {
+        const id = info.event._def.publicId; // イベントのDBに登録されているidを取得
+        axios
+            .post(`/calendar/${id}`, {
+                start_date: info.event._instance.range.start.valueOf(), 
+                end_date: info.event._instance.range.end.valueOf(),
+            })
+            .then( () => {
+                alert("登録に成功しました!");
+            })
+            .catch(() => {
+                // バリデーションエラーなど 
+                alert("登録に失敗しました");
+            });
+    },
 });
+
+let calendar = new Calendar(calendarEl, {
+    
+    eventClick: function(info) {
+        click++;
+        if (click === 1) {
+            
+        } else if (click === 2) {
+            clearTimeout(oneClickTimer); // クリック1回時の処理を削除
+            click = 0;
+            
+            // 削除処理
+            if(!confirm('イベントを削除しますか?')) return false;
+            
+            const id = info.event._def.publicId; 
+            axios
+                .post(`/calendar/${id}/delete`)
+                .then(() => {
+                    info.event.remove(); // カレンダーからイベントを削除
+                    alert("削除に成功しました!");
+                })
+                .catch(() => {
+                    alert("削除に失敗しました");
+                });
+        }
+    },
+    
+});
+        
+
 // レンダリング 
 calendar.render();

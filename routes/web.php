@@ -30,8 +30,12 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-require __DIR__.'/auth.php';
-
 Route::get('/', [PostController::class, 'index'])->name('index');
 Route::view('/calendar', 'calendar/calendar');
 Route::post('/calendar', [EventController::class, 'store'])->name('event.store');
+Route::post('/calendar/event', [EventController::class, 'getEvent'])->name('event.get');
+Route::post('/calendar/{event}', [EventController::class, 'update'])->name('event.update');
+Route::post('/calendar/{event}/delete', [EventController::class, 'delete'])->name('event.delete');
+
+
+require __DIR__.'/auth.php';

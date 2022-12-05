@@ -86,10 +86,6 @@ let calendar = new Calendar(calendarEl, {
                 alert("登録に失敗しました");
             });
     },
-});
-
-let calendar = new Calendar(calendarEl, {
-    
     eventClick: function(info) {
         click++;
         if (click === 1) {

@@ -1,8 +1,12 @@
 <?php
 
+//Users ルーティング
+use App\Http\Controllers\CreateUsersController;
+
+
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\PostController;
+//use App\Http\Controllers\PostController;
 use App\Http\Controllers\EventController;
 
 /*
@@ -16,9 +20,11 @@ use App\Http\Controllers\EventController;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+//Users ルーティング
+//Route::get('/', [CreateUsersController::class, 'index']);
+Route::get('/user', [CreateUsersController::class, 'index']);
+
+//Route::get('/', function () {return view('welcome');});
 
 Route::get('/dashboard', function () {
     return view('dashboard');
@@ -30,7 +36,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-Route::get('/', [PostController::class, 'index'])->name('index');
+//Route::get('/', [PostController::class, 'index'])->name('index');
 Route::view('/calendar', 'calendar/calendar');
 Route::post('/calendar', [EventController::class, 'store'])->name('event.store');
 Route::post('/calendar/event', [EventController::class, 'getEvent'])->name('event.get');

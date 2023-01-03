@@ -62,4 +62,10 @@ class NewPasswordController extends Controller
                     : back()->withInput($request->only('email'))
                             ->withErrors(['email' => __($status)]);
     }
+    
+    //loginセット
+    public function login()
+    {
+        return view('auth/login');
+    }
 }

@@ -2,11 +2,11 @@
 
 //Users ルーティング
 use App\Http\Controllers\CreateUsersController;
+use App\Http\Controllers\Auth\NewPasswordController;
 
 
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
-//use App\Http\Controllers\PostController;
 use App\Http\Controllers\EventController;
 
 /*
@@ -20,15 +20,18 @@ use App\Http\Controllers\EventController;
 |
 */
 
+//カレッジ認証機能
+Route::get('/', [NewPasswordController::class, 'login'])->name('login');
+Route::get('/index', [CreateUsersController::class, 'index'])->name('index');
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->middleware(['auth', 'verified'])->name('dashboard');
+
 //Users ルーティング
 //Route::get('/', [CreateUsersController::class, 'index']);
 Route::get('/user', [CreateUsersController::class, 'index']);
 
 //Route::get('/', function () {return view('welcome');});
-
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -36,7 +39,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-//Route::get('/', [PostController::class, 'index'])->name('index');
+
 Route::view('/calendar', 'calendar/calendar');
 Route::post('/calendar', [EventController::class, 'store'])->name('event.store');
 Route::post('/calendar/event', [EventController::class, 'getEvent'])->name('event.get');

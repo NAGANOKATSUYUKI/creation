@@ -22,23 +22,13 @@ use App\Http\Controllers\EventController;
 
 //カレッジ認証機能
 Route::get('/', [NewPasswordController::class, 'login'])->name('login');
-Route::get('/index', [CreateUsersController::class, 'index'])->name('index');
+
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
-//Route::get('/calender', [EventController::class, 'calendar'])->name('calender');
 
 //Users ルーティング
-//Route::get('/', [CreateUsersController::class, 'index']);
-Route::get('/user', [CreateUsersController::class, 'index']);
-
-//Route::get('/', function () {return view('welcome');});
-
-//Users ルーティング
-//Route::get('/', [CreateUsersController::class, 'index']);
-Route::get('/user', [CreateUsersController::class, 'index']);
-
-//Route::get('/', function () {return view('welcome');});
+Route::get('/index', [CreateUsersController::class, 'index'])->name('index');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -47,11 +37,11 @@ Route::middleware('auth')->group(function () {
 });
 
 
-Route::view('/calendar', 'calendar/calendar');
-Route::post('/calendar', [EventController::class, 'store'])->name('event.store');
-Route::post('/calendar/event', [EventController::class, 'getEvent'])->name('event.get');
-Route::post('/calendar/{event}', [EventController::class, 'update'])->name('event.update');
-Route::post('/calendar/{event}/delete', [EventController::class, 'delete'])->name('event.delete');
+//Route::view('/calendar', 'calendar/calendar');
+Route::post('/dashboard', [EventController::class, 'store'])->name('event.store');
+Route::post('/dashboard/event', [EventController::class, 'getEvent'])->name('event.get');
+Route::post('/dashboard/{event}', [EventController::class, 'update'])->name('event.update');
+Route::post('/dashboard/{event}/delete', [EventController::class, 'delete'])->name('event.delete');
 
 
 require __DIR__.'/auth.php';

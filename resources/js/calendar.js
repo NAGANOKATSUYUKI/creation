@@ -56,7 +56,7 @@ let calendar = new Calendar(calendarEl, {
     },
     events: function (info, successCallback, failureCallback) {
         axios
-            .post("/dashboard/event", {
+            .post("/calendar/event", {
                 start_date: info.start.valueOf(),
                 end_date: info.end.valueOf(),
             })
@@ -71,15 +71,14 @@ let calendar = new Calendar(calendarEl, {
                 alert("取得に失敗しました");
             });
     },
-
-    eventDrop: function(info) {
+    eventDorp: function(info) {
         const id = info.event._def.publicId; // イベントのDBに登録されているidを取得
         axios
-            .post(`/dashboard/${id}`, {
+            .post(`/calendar/${id}`, {
                 start_date: info.event._instance.range.start.valueOf(), 
                 end_date: info.event._instance.range.end.valueOf(),
             })
-            .then(() => {
+            .then( () => {
                 alert("登録に成功しました!");
             })
             .catch(() => {
@@ -87,10 +86,11 @@ let calendar = new Calendar(calendarEl, {
                 alert("登録に失敗しました");
             });
     },
-    
+});
+
+let calendar = new Calendar(calendarEl, {
     
     eventClick: function(info) {
-        
         click++;
         if (click === 1) {
             
@@ -103,7 +103,7 @@ let calendar = new Calendar(calendarEl, {
             
             const id = info.event._def.publicId; 
             axios
-                .post(`/dashboard/${id}/delete`)
+                .post(`/calendar/${id}/delete`)
                 .then(() => {
                     info.event.remove(); // カレンダーからイベントを削除
                     alert("削除に成功しました!");

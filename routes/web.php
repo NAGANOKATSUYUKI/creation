@@ -26,6 +26,13 @@ Route::get('/index', [CreateUsersController::class, 'index'])->name('index');
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
+//Route::get('/calender', [EventController::class, 'calendar'])->name('calender');
+
+//Users ルーティング
+//Route::get('/', [CreateUsersController::class, 'index']);
+Route::get('/user', [CreateUsersController::class, 'index']);
+
+//Route::get('/', function () {return view('welcome');});
 
 //Users ルーティング
 //Route::get('/', [CreateUsersController::class, 'index']);
